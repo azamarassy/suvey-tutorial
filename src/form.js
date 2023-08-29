@@ -45,6 +45,7 @@ const FormComponent = () => {
     document.getElementById('leftPt').textContent = output;
   };
 
+  //git test
 
   const clearForm = (event, i) => {
     event.preventDefault();
