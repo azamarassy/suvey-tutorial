@@ -1,4 +1,6 @@
 import React from 'react';
+// import { useState } from 'react';
+// import { useForm } from 'react-hook-form';
 
 const FormComponent = () => {
 
@@ -51,6 +53,9 @@ const FormComponent = () => {
     const formControls = document.getElementsByClassName('form-control');
     formControls[i-1].value = "";
   };
+  //-----------------------------------------------------------------------------------------------
+
+  //------------------------------------------------------------------------------------------------
 
   for (let i = 1; i <= formCount; i++) {
     forms.push(
@@ -58,18 +63,25 @@ const FormComponent = () => {
         <div className="form-group row ms-1 my-3">
           <label className="col-sm-4 control-label my-2 ml-3" style={{ fontSize: '20px' }} htmlFor={`asset${i}`}>名前</label>
           <div className="col-sm-4">
-            <input type="text" name={`asset_name${i}`} className="my-2 form-control" onChange={restrictInputToNumbers}/>
+            <input type="text" name={`asset_name${i}`} className="my-2 form-control" onChange={function(event){
+              restrictInputToNumbers(event);
+              getValue(event);        
+            }}/>
           </div>
           <div className="col-sm-4 d-flex align-items-center">
-            <input type="submit" className="submitButton btn btn-primary mr-2" style={{ fontSize: '20px' }} value="決定" onClick={getValue}/>
-            <input type="reset" className="clearButton my-2 btn btn-primary" name={`clear${i}`} style={{ fontSize: '20px', marginLeft: '4px' }} value="クリア" onClick={(event) => clearForm(event, i)}/>
+            {/* <input type="submit" className="submitButton btn btn-primary mr-2" style={{ fontSize: '20px' }} value="決定" onClick={getValue}/> */}
+            <input type="reset" className="clearButton my-2 btn btn-primary" name={`clear${i}`} style={{ fontSize: '20px', marginLeft: '4px' }} value="クリア" onClick={(event) => {
+              clearForm(event, i);
+              getValue(event);
+              }}/>
           </div>
         </div>
       </form>
     );
   }
 
-  return <div>{forms}</div>;
+  return( <div>{forms}</div>);
+
 };
 
 export default FormComponent;
