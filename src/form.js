@@ -21,9 +21,22 @@ const FormComponent = () => {
 
     if (inputValue === '') return; //入力値が空の場合、チェックを行わずに関数を終了
 
-    if (!isValidNumber(inputValue)) { //isValidNumber 関数を呼び出して、入力値が1から50の整数であるかを判定
-      inputElement.value = ''; //不正な値であれば取り除く
-      //test
+    const errorMessage = inputElement.parentNode.querySelector('.error-message');
+    if (!isValidNumber(inputValue)) {
+      inputElement.classList.add('is-invalid');
+      inputElement.value = '';
+      if (!errorMessage) {
+        const errorMessage = document.createElement('div');
+        errorMessage.classList.add('error-message');
+        errorMessage.textContent = '1~50の整数を入力してください';
+        errorMessage.style.color = 'red';
+        inputElement.parentNode.appendChild(errorMessage);
+      }
+    } else {
+      inputElement.classList.remove('is-invalid');
+      if (errorMessage) {
+        errorMessage.remove();
+      }
     }
   };
  //--------------------------------------------------------------------------------------------------------
@@ -38,16 +51,21 @@ const FormComponent = () => {
   };
 
   //残りポイントの計算
-  const getValue = (event) => {
+  const getValue = () => {
     let input = calculateInput();
     let output = 125 - input;
-    document.getElementById('leftPt').textContent = output;
+    document.getElementById('leftPt').textContent = output; //
   };
 
   //各フォームの値を消去する関数
-  const clearForm = (event, i) => {
+  const clearForm = (i) => {
     const formControls = document.getElementsByClassName('form-control');
     formControls[i-1].value = "";
+    const errorMessage = formControls[i-1].parentNode.querySelector('.error-message');
+    if (errorMessage) {
+      errorMessage.remove();
+      //フォームの色も元に戻す処理を追加する
+    }
   };
   //----------------------------------------------------------------------------------------------------------------------------------
 
@@ -58,8 +76,9 @@ const FormComponent = () => {
 
   for(let i = 1; i <= formCount; i++){
     forms.push(//.push:配列の末尾に新しい要素を追加するメソッド
-      <form key={i} className="form-horizontal">
+      <form key={i} className="form-horizontal" onSubmit={(e) => e.preventDefault()}>
         {/* key={i}:要素を区別するために使用する識別子。リスト内で同じ要素が複数回レンダリングされる場合に必要 */}
+        {/* onSubmit={(e) => e.preventDefault()}:フォームに値を入力してenterを押した時の処理をなくす */}
         <div className="form-group row ms-1 my-3">
           {/* プロパティ名 */}
           <label className="col-sm-4 control-label my-2 ml-3" style={{ fontSize: '20px' }}>プロパティ名</label>
@@ -67,14 +86,14 @@ const FormComponent = () => {
           <div className="col-sm-4">
             <input type="text" className="my-2 form-control" onChange={function(event){
               restrictInputToNumbers(event);
-              getValue(event);        
+              getValue();        
             }}/>
           </div>
           {/* クリアボタン */}
           <div className="col-sm-4 d-flex align-items-center">
-            <input type="reset" className="clearButton my-2 btn btn-primary" style={{ fontSize: '20px', marginLeft: '4px' }} value="クリア" onClick={(event) => {
-              clearForm(event, i);//フォームの入力値を消す
-              getValue(event);//残りポイントを計算
+            <input type="reset" className="clearButton my-2 btn btn-primary" style={{ fontSize: '20px', marginLeft: '4px' }} value="クリア" onClick={() => {
+              clearForm(i);//フォームの入力値を消す
+              getValue();//残りポイントを計算
               }}/>
           </div>
         </div>
