@@ -46,17 +46,25 @@ const App = () => {
     }, [showComponents]);
 
   //----------------------------------------------------------------------------------------------------
+  //propsで渡す関数
   const functions = {
       handleResetClick: () => {   
         setting();
-        setLeftPt(125);
+        setLeftPt(125);//残りポイントを125にする
 
         if (showComponents) {
          document.getElementById('leftPt').textContent = "125";
         
+         //フォームの入力内容を消してエラーメッセージも消す関数
         const clearForm = (i) => {
           const formControls = document.getElementsByClassName('form-control');
           formControls[i].value = "";
+          const errorMessage = formControls[i].parentNode.querySelector('.error-message');//エラーメッセージを取得
+
+          if (errorMessage) {
+            errorMessage.remove();//エラーメッセージを削除
+            formControls[i].classList.remove('is-invalid');///form-controlのclassname属性から'is-invalid'を削除。これによりフォームの赤枠が消える
+        }
         };
     
         for (let i = 0; i < document.getElementsByClassName('clearButton').length; i++) {
