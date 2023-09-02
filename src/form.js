@@ -36,6 +36,7 @@ const FormComponent = () => {
       inputElement.classList.remove('is-invalid');
       if (errorMessage) {
         errorMessage.remove();
+        
       }
     }
   };
@@ -62,6 +63,7 @@ const FormComponent = () => {
     const formControls = document.getElementsByClassName('form-control');
     formControls[i-1].value = "";
     const errorMessage = formControls[i-1].parentNode.querySelector('.error-message');
+
     if (errorMessage) {
       errorMessage.remove();
       //フォームの色も元に戻す処理を追加する
